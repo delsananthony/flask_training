@@ -27,39 +27,81 @@
     </thead>
     <tbody>
         {% for student in students %}
-        <td>{{student.id}}</td>
-        <td>{{student.first_name}} {{student.last_name}}</td>
-        <td><a href="/{{ student.id }}/edit/" class="btn btn-primary">Edit</a></td>
+        <tr>
+            <td>{{student.id}}</td>
+            <td>{{student.first_name}} {{student.last_name}}</td>
+            <td>
+                <button type="button" data-id="{{student.id}}" class="edit btn btn-primary">
+                    Edit
+                </button>
+            </td>
         </tr>
+
+
         {% endfor %}
     </tbody>
 </table>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
-                ...
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="close btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+    $(document).ready(function () {
+        $(".close").click(function () {
+            $('#editModal').modal('toggle')
+        });
+
+        $("#submit").click(function () {
+            var id = $("#userid").val();
+            var first_name = $("#first_name").val();
+            var last_name = $("#last_name").val();
+            var middle_name = $("#middle_name").val();
+            $.ajax({
+                url: '/' + id + '/edit/',
+                type: 'post',
+                data: {
+                    first_name: first_name,
+                    last_name: last_name,
+                    middle_name: middle_name
+                },
+                success: function (data) {
+                    location.reload(true);
+                    $('#editModal').modal('hide')
+                }
+            })
+        })
+
+        $(".edit").click(function () {
+            let id = $(this).data('id')
+            $('#editModal').modal('toggle')
+            $.ajax({
+                url: '/user/edit/',
+                type: 'post',
+                data: { id: id },
+                success: function (data) {
+                    $('.modal-body').html(data)
+                    $('.modal-body').append(data.htmlresponse)
+                    $('#editModal').modal('show')
+                }
+            })
+        });
+    });
+</script>
 
 {% endblock %}
