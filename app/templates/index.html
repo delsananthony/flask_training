@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="/user/" method="post">
+    <div class="form-group">
+        <input type="text" class="form-control" name="first_name" placeholder="First name">
+        </input>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="last_name" placeholder="Last name" name">
+        </input>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="middle_name" placeholder="Middle name">
+        </input>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <td>{{student.id}}</td>
+        <td>{{student.first_name}} {{student.last_name}}</td>
+        <td><a href="/{{ student.id }}/edit/" class="btn btn-primary">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
